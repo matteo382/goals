@@ -1,0 +1,176 @@
+
+/* ======= Fond animé type vague multicolore (corrigé) ======= */
+#background-animation {
+  position: fixed;
+  top:0; left:0;
+  width:100vw;
+  height:100vh;
+  pointer-events: none;
+  z-index: -1;
+
+  /* Gradient multicolore très subtil, opacité faible */
+  background: linear-gradient(120deg,
+              rgba(30,144,255,0.05) 0%,
+              rgba(138,43,226,0.05) 33%,
+              rgba(255,105,180,0.05) 66%,
+              rgba(30,144,255,0.05) 100%);
+
+  /* On agrandit la taille du gradient pour éviter répétition et lignes */
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+
+  /* Flou léger pour l’effet Control Center */
+  backdrop-filter: blur(40px);
+
+  /* Animation de déplacement du gradient pour créer la vague */
+  animation: waveGradient 30s ease infinite;
+}
+
+@keyframes waveGradient {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 75%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 25%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes waveMove {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes bgMove {
+  0% {background-position: 0 0;}
+  100% {background-position: 1000px 1000px;}
+}
+
+body {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#form-container, #sort-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+#form-container input, #form-container select, #form-container button,
+#sort-container button {
+  padding: 6px 12px;
+  font-size: 1em;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+#form-container button:hover,
+#sort-container button:hover {
+  background-color: rgba(255,255,255,0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(255,255,255,0.3);
+}
+
+#goals-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+/* ======= Cartes ======= */
+.card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  position: relative;
+  cursor: grab;
+}
+
+.card:active { cursor: grabbing; }
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+}
+
+.card.completed {
+  background-color: #4caf50;
+  color: white;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 10px #4caf50; }
+  50% { box-shadow: 0 0 20px #4caf50; }
+  100% { box-shadow: 0 0 10px #4caf50; }
+}
+
+/* Bord coloré selon périodicité */
+.card[data-period="Hebdomadaire"] { border-top: 4px solid #1e90ff; }
+.card[data-period="Bi-Hebdomadaire"] { border-top: 4px solid #00ced1; }
+.card[data-period="Mensuel"] { border-top: 4px solid #ff8c00; }
+.card[data-period="Bi-Mensuel"] { border-top: 4px solid #ff69b4; }
+.card[data-period="Annuel"] { border-top: 4px solid #ffd700; }
+
+.card p.period {
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* ======= Boutons ======= */
+.card button {
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  margin-top: 5px;
+}
+
+.card button:hover {
+  background-color: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.7);
+}
+
+.card button:active {
+  transform: scale(0.9);
+}
+
+/* Progress bar circulaire dynamique */
+.progress-container { position: relative; width: 50px; height: 50px; margin: 0 auto; }
+.progress-circle {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+/* Confettis */
+#confetti-canvas { position: fixed; top: 0; left: 0; width:100vw; height:100vh; pointer-events:none; z-index:1000; }
